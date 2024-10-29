@@ -1,8 +1,10 @@
 const express = require("express");
-//const morgan = require("morgan");
-
+const logger = require("morgan");
 const app = express();
+
+app.use(logger('dev'));   
 app.use(express.static("public"));
+
 app.get("/", (request, response) => {
     response.sendFile(__dirname + "/view/index.html");
 });
