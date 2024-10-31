@@ -4,35 +4,37 @@ const httpsPrefix = "https://";
 const urlSufix = "/products"
 const baseURL = process.env.BASE_URL;
 
-const fakeURL = httpsPrefix + "fakestoreapi.com" + urlSufix;
-const url = httpsPrefix + baseURL + urlSufix;
+const url = httpsPrefix + "fakestoreapi.com" + urlSufix;
+//const url = httpsPrefix + baseURL + urlSufix;
+
+async function getAll() {
+    return axios.get(url);
+}
+
+async function getByID(id) {
+    return axios.get(url + "/" + id);
+}
+
+async function getByQuery1(query) {
+    const queryKey = Object.keys(query)[0];
+    const queryValue = query[queryKey];
+    console.log("QUERY=", queryKey + ":", queryValue);
+
+    const dataObj = await getAll();
+    const dataArr = Object.entries(dataObj.data).map((entry) => entry[1]);
+
+    console.log(JSON.stringify(dataArr));
+    const result = dataArr.find((entry) => entry[queryKey] === queryValue);
+    console.log(result);
+
+    return result;
+}
 
 function useAxiosAPI() {
-    const axiosGetAll = () => {
-        return get(url);
-    };
-
-    const axiosGetAllFake = () => {
-        return get(fakeURL);
-    };
-
-    const axiosGetByID = (id) => {
-        return get(url + "/" + id);
-    };
-
-    const axiosGetByIDFake = (id) => {
-        return get(fakeURL + "/" + id);
-    };
-
-    function get(param) {
-        return axios.get(param);
-    }
-
     return {
-        axiosGetAll,
-        axiosGetAllFake,
-        axiosGetByID,
-        axiosGetByIDFake,
+        getAll,
+        getByID,
+        getByQuery1,
     };
 }
 
