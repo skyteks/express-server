@@ -19,7 +19,6 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/api/search", async (req, res) => {
-    next2(req, res);
     const { getByQuery1 } = useAxiosAPI();
     try {
         const apiRes = await getByQuery1(req.query);
@@ -31,7 +30,6 @@ app.get("/api/search", async (req, res) => {
 });
 
 app.get("/api", async (req, res) => {
-    next2(req, res);
     const { getAll } = useAxiosAPI();
     try {
         const apiRes = await getAll();
@@ -43,7 +41,6 @@ app.get("/api", async (req, res) => {
 });
 
 app.get("/api/:id", async (req, res) => {
-    next2(req, res);
     const { getByID } = useAxiosAPI();
     const { id } = req.params;
     try {
@@ -65,12 +62,9 @@ function handleBefore(req, res, next) {
     if (req.originalUrl == "/favicon.ico") {
         return;
     }
+    res.on("finish", () => handleAfter(req));
     //console.log("BEFORE", req.path);
     next();
-}
-
-function next2(req, res) {
-    res.on("finish", () => handleAfter(req));
 }
 
 function handleAfter(req) {

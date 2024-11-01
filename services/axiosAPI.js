@@ -23,9 +23,7 @@ async function getByQuery1(query) {
     const dataObj = await getAll();
     const dataArr = Object.entries(dataObj.data).map((entry) => entry[1]);
 
-    console.log(JSON.stringify(dataArr));
-    const result = dataArr.find((entry) => entry[queryKey] === queryValue);
-    console.log(result);
+    const result = dataArr.filter((entry, i) => entry[queryKey] == queryValue);
 
     return result;
 }
