@@ -1,5 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
+const favicon = require('serve-favicon')
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT;
@@ -8,6 +9,7 @@ const { useAxiosAPI } = require("./services/axiosAPI");
 app.use(logger("dev"));
 app.use(express.static("public"));
 app.use(express.json());
+//app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(handleBefore);
 
 app.get("/", (req, res) => {
@@ -59,9 +61,6 @@ app.get("*", (req, res) => {
 app.listen(port, () => console.log("Express Server running on: http://localhost:" + port));
 
 function handleBefore(req, res, next) {
-    if (req.originalUrl == "/favicon.ico") {
-        return;
-    }
     res.on("finish", () => handleAfter(req));
     //console.log("BEFORE", req.path);
     next();
