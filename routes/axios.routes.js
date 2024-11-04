@@ -3,8 +3,6 @@ const path = require("path");
 const axiosAPI = require(path.resolve("./middleware/axiosAPI"));
 
 router.get("/", async (req, res) => {
-    console.log("GOTO", "/api", "PATH", req.path);
-
     const { getAll } = axiosAPI();
     try {
         const apiRes = await getAll();
@@ -16,10 +14,9 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
-    console.log("GOTO", "/search", "PATH", req.path);
-    const { getByQuery1 } = axiosAPI();
+    const { getByQueries } = axiosAPI();
     try {
-        const apiRes = await getByQuery1(req.query);
+        const apiRes = await getByQueries(req.query);
         res.json(apiRes);
     } catch (error) {
         console.error(error);
@@ -29,7 +26,6 @@ router.get("/search", async (req, res) => {
 
 
 router.get("/:id", async (req, res) => {
-    console.log("GOTO", "/:id", "PATH", req.path);
     const { getByID } = axiosAPI();
     const { id } = req.params;
     try {
