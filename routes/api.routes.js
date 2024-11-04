@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const axiosAPI = require("../middleware/axiosAPI");
+const path = require("path");
+const axiosAPI = require(path.resolve("./middleware/axiosAPI"));
 
 router.get("/", async (req, res) => {
     console.log("GOTO", "/api", "PATH", req.path);

@@ -1,9 +1,10 @@
 const express = require("express");
 const logger = require("morgan");
+const path = require("path");
 const favicon = require("serve-favicon");
-const handleBefore = require("./middleware/beforeAndAfter");
+const handleBefore = require(path.resolve("./middleware/beforeAndAfter"));
 require("dotenv").config();
-const apiRoutes = require("./routes/api.routes");
+const apiRoutes = require(path.resolve("./routes/api.routes"));
 
 const app = express();
 const port = process.env.PORT || 5005;
@@ -11,11 +12,11 @@ const port = process.env.PORT || 5005;
 app.use(logger("dev"));
 app.use(express.static("public"));
 app.use(express.json());
-app.use(favicon(__dirname + "/public/favicon.ico"));
+app.use(favicon(path.resolve("./public/favicon.ico")));
 app.use(handleBefore);
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/view/index.html");
+    res.sendFile(path.resolve("./view/index.html"));
 });
 
 app.get("/hello", (req, res) => {
