@@ -4,7 +4,8 @@ const path = require("path");
 const favicon = require("serve-favicon");
 const handleBefore = require(path.resolve("./middleware/beforeAndAfter"));
 require("dotenv").config();
-const apiRoutes = require(path.resolve("./routes/axios.routes"));
+const axiosRoutes = require(path.resolve("./routes/axios.routes"));
+const mongoRoutes = require(path.resolve("./routes/mongo.routes"));
 
 const app = express();
 const port = process.env.PORT || 5005;
@@ -23,7 +24,9 @@ app.get("/hello", (req, res) => {
     res.send("<h1>Hello World</h1>");
 });
 
-app.use("/axios", apiRoutes);
+app.use("/axios", axiosRoutes);
+
+app.use("/mongo", mongoRoutes);
 
 app.get("*", (req, res) => {
     res.status(404).send("<h1>404 Not Found<h1>");
