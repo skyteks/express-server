@@ -6,7 +6,10 @@ const handleBefore = require(path.resolve("./middleware/beforeAndAfter"));
 require("dotenv").config();
 const axiosRoutes = require(path.resolve("./routes/axios.routes"));
 const mongoRoutes = require(path.resolve("./routes/mongo.routes"));
+const { isAuthenticated } = require("./middleware/jwt.middleware");
+const authRoutes = require(path.resolve("./routes/auth.routes"));
 
+ 
 const app = express();
 const port = process.env.PORT || 5005;
 
@@ -24,9 +27,11 @@ app.get("/hello", (req, res) => {
     res.send("<h1>Hello World</h1>");
 });
 
-app.use("/axios", axiosRoutes);
+app.use("/axios", isAuthenticated, axiosRoutes);
 
 app.use("/mongo", mongoRoutes);
+
+app.use("/auth", mongoRoutes);
 
 app.get("*", (req, res) => {
     res.status(404).send("<h1>404 Not Found<h1>");
