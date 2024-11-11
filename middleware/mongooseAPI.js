@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/";
+const uri = process.env.MONGODB_URI;// || "mongodb://localhost:27017/";
 
 mongoose
     .connect(uri)
     .then((x) => {
         console.log("Connected to Mongo! Database name: " + x.connections[0].name);
+        console.log(x.connections[0].collections);
     });
 
 async function getAllNotes() {
