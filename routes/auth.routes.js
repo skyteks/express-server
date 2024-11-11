@@ -6,7 +6,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 router.post("/register", (req, res, next) => {
     const { email, password, name } = req.body;
     console.log("TEST");
-    
+
     if (email === "" || password === "" || name === "") {
         res.status(400).json({ message: "Provide email, password and name" });
         return;

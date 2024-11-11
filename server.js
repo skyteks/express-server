@@ -9,7 +9,7 @@ const mongoRoutes = require(path.resolve("./routes/mongo.routes"));
 const { isAuthenticated } = require("./middleware/jwt.middleware");
 const authRoutes = require(path.resolve("./routes/auth.routes"));
 
- 
+
 const app = express();
 const port = process.env.PORT || 5005;
 
