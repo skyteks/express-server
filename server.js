@@ -19,6 +19,12 @@ app.use(express.json());
 app.use(favicon(path.resolve("./public/favicon.ico")));
 app.use(handleBefore);
 
+app.use("", authRoutes);
+
+app.use("/axios", axiosRoutes);
+
+app.use("/mongo", mongoRoutes);
+
 app.get("/", (req, res) => {
     res.sendFile(path.resolve("./view/index.html"));
 });
@@ -26,12 +32,6 @@ app.get("/", (req, res) => {
 app.get("/hello", (req, res) => {
     res.send("<h1>Hello World</h1>");
 });
-
-app.use("/axios", isAuthenticated, axiosRoutes);
-
-app.use("/mongo", mongoRoutes);
-
-app.use("/auth", mongoRoutes);
 
 app.get("*", (req, res) => {
     res.status(404).send("<h1>404 Not Found<h1>");

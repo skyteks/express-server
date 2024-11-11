@@ -1,7 +1,12 @@
+const router = require("express").Router();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 router.post("/register", (req, res, next) => {
     const { email, password, name } = req.body;
-
+    console.log("TEST");
+    
     if (email === "" || password === "" || name === "") {
         res.status(400).json({ message: "Provide email, password and name" });
         return;
@@ -18,7 +23,6 @@ router.post("/register", (req, res, next) => {
         res.status(400).json({ message: "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter." });
         return;
     }
-
 
     User.findOne({ email })
         .then((foundUser) => {
@@ -85,11 +89,8 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/verify", isAuthenticated, (req, res, next) => {
-
     console.log("req.payload", req.payload);
-
     res.status(200).json(req.payload);
-
 });
 
 module.exports = router;
