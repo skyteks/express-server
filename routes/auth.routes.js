@@ -98,8 +98,24 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/verify", isAuthenticated, (req, res) => {
-    console.log("req.payload", req.payload);
+    const issuedAt = new Date(req.payload.iat * 1000);
+    const expiresAt = new Date(req.payload.exp * 1000);
+    console.log("TOKEN created: ", issuedAt);
+    console.log("TOKEN expires: ", expiresAt);
+    
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    const remainingLifetime = req.payload.exp - currentTime;
+    console.log("TOKEN remaining lifetime: ", formatTime(remainingLifetime));
+    
     res.status(200).json(req.payload);
 });
+
+function formatTime(seconds) {
+    const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
+    const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return `${hrs}:${mins}:${secs}`;
+}
 
 module.exports = router;

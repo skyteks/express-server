@@ -5,7 +5,7 @@ const isAuthenticated = (req, res, next) => {
         const token = req.headers.authorization.split(" ")[1];
 
         const payload = jwt.verify(token, process.env.TOKEN_SECRET);
-        console.log("TOKEN: accepted");
+        console.log("TOKEN authentication successful");
         
         req.payload = payload;
 
