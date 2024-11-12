@@ -2,12 +2,16 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
+const mongoose = require("mongoose");
+const User = require("../models/user.model")
+const tokenSecret = process.env.TOKEN_SECRET;
+const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
-router.post("/register", (req, res, next) => {
-    const { email, password, name } = req.body;
-    console.log("TEST");
+router.post("/register", (req, res) => {
+    console.log("REGISTER: ", req.body);
+    const { username, password, email } = req.body;
 
-    if (email === "" || password === "" || name === "") {
+    if (username === "" || password === "" || email === "") {
         res.status(400).json({ message: "Provide email, password and name" });
         return;
     }
@@ -34,30 +38,35 @@ router.post("/register", (req, res, next) => {
             const salt = bcrypt.genSaltSync(saltRounds);
             const hashedPassword = bcrypt.hashSync(password, salt);
 
-            return User.create({ email, password: hashedPassword, name });
+            return User.create({ username, email, password: hashedPassword });
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json({ message: "Internal Server Error" })
         })
         .then((createdUser) => {
-            const { email, name, _id } = createdUser;
+            const { username, email, _id } = createdUser;
 
-            const user = { email, name, _id };
+            const user = { username, email, _id };
 
             res.status(201).json({ user: user });
         })
-        .catch(err => {
-            console.log(err);
+        .catch((error) => {
+            console.log(error);
             res.status(500).json({ message: "Internal Server Error" })
         });
 });
 
-router.post("/login", (req, res, next) => {
-    const { email, password } = req.body;
+router.post("/login", (req, res) => {
+    console.log("LOGIN: ", req.body);
+    const { username, password } = req.body;
 
-    if (email === "" || password === "") {
+    if (username === "" || password === "") {
         res.status(400).json({ message: "Provide email and password." });
         return;
     }
 
-    User.findOne({ email })
+    User.findOne({ username })
         .then((foundUser) => {
 
             if (!foundUser) {
@@ -72,13 +81,13 @@ router.post("/login", (req, res, next) => {
                 return;
             }
 
-            const { _id, email, name } = foundUser;
+            const { _id, username } = foundUser;
 
-            const payload = { _id, email, name };
+            const payload = { _id, username };
 
             const authToken = jwt.sign(
                 payload,
-                process.env.TOKEN_SECRET,
+                tokenSecret,
                 { algorithm: "HS256", expiresIn: "6h" }
             );
 
@@ -88,7 +97,7 @@ router.post("/login", (req, res, next) => {
         .catch(err => res.status(500).json({ message: "Internal Server Error" }));
 });
 
-router.get("/verify", isAuthenticated, (req, res, next) => {
+router.get("/verify", isAuthenticated, (req, res) => {
     console.log("req.payload", req.payload);
     res.status(200).json(req.payload);
 });

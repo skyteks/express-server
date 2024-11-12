@@ -23,7 +23,7 @@ app.use("", authRoutes);
 
 app.use("/axios", axiosRoutes);
 
-app.use("/mongo", mongoRoutes);
+app.use("/mongo", isAuthenticated, mongoRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.resolve("./view/index.html"));
@@ -34,7 +34,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-    res.status(404).send("<h1>404 Not Found<h1>");
+    res.status(404).send("<h1>404 Not Found</h1>");
 });
 
 app.listen(port, () => console.log("Express Server running on: http://localhost:" + port));
