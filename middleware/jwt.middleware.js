@@ -1,17 +1,17 @@
 const jwt = require("jsonwebtoken");
 
-const isAuthenticated = (req, res, next) => {
+const isAuthenticated = (request, response, next) => {
     try {
-        const token = req.headers.authorization.split(" ")[1];
+        const token = request.headers.authorization.split(" ")[1];
 
         const payload = jwt.verify(token, process.env.TOKEN_SECRET);
         console.log("TOKEN authentication successful");
         
-        req.payload = payload;
+        request.payload = payload;
 
         next();
     } catch (error) {
-        res.status(401).json("token not provided or not valid");
+        response.status(401).json("token not provided or not valid");
     }
 }
 

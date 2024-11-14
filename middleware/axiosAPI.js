@@ -39,7 +39,7 @@ async function getByQueries(queries) {
     return result;
 }
 
-function axiosAPI() {
+function useAxiosAPI() {
     return {
         getAll,
         getByID,
@@ -48,4 +48,4 @@ function axiosAPI() {
     };
 }
 
-module.exports = axiosAPI;
+module.exports = useAxiosAPI;

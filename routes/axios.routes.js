@@ -1,39 +1,39 @@
 const router = require("express").Router();
 const path = require("path");
-const axiosAPI = require(path.resolve("./middleware/axiosAPI"));
+const useAxiosAPI = require(path.resolve("./middleware/axiosAPI"));
 
-router.get("/", async (req, res) => {
-    const { getAll } = axiosAPI();
+router.get("/", async (request, response) => {
+    const { getAll } = useAxiosAPI();
     try {
         const apiRes = await getAll();
-        res.status(apiRes.status).json(parseResult(apiRes));
+        response.status(apiRes.status).json(parseResult(apiRes));
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 });
 
-router.get("/search", async (req, res) => {
-    const { getByQueries } = axiosAPI();
+router.get("/search", async (request, response) => {
+    const { getByQueries } = useAxiosAPI();
     try {
-        const apiRes = await getByQueries(req.query);
-        res.json(apiRes);
+        const apiRes = await getByQueries(request.query);
+        response.json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 });
 
 
-router.get("/:id", async (req, res) => {
-    const { getByID } = axiosAPI();
-    const { id } = req.params;
+router.get("/:id", async (request, response) => {
+    const { getByID } = useAxiosAPI();
+    const { id } = request.params;
     try {
         const apiRes = await getByID(id);
-        res.status(apiRes.status).json(parseResult(apiRes));
+        response.status(apiRes.status).json(parseResult(apiRes));
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 });
 

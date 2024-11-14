@@ -87,7 +87,7 @@ async function deleteNoteById(id) {
     return Note.findByIdAndDelete(objId)
         .then((result) => {
             console.log("Note deleted!");
-            res.status(204).send();
+            response.status(204).send();
         })
         .catch((error) => {
             console.error("Error while deleting the note ->", error);

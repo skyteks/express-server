@@ -3,75 +3,74 @@ const { log } = require("console");
 const path = require("path");
 const mongoAPI = require(path.resolve("./middleware/mongooseAPI"));
 
-router.get("/", async (req, res) => {
+router.get("/", async (request, response) => {
     const { getAllNotes } = mongoAPI();
     try {
         const apiRes = await getAllNotes();
-        res.status(200).json(apiRes);
+        response.status(200).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 });
 
-router.get("/search", async (req, res) => {
+router.get("/search", async (request, response) => {
     const { findNotesByQuery1 } = mongoAPI();
     try {
-        const apiRes = await findNotesByQuery1(req.query);
-        res.status(200).json(apiRes);
+        const apiRes = await findNotesByQuery1(request.query);
+        response.status(200).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (request, response) => {
     const { getNoteById } = mongoAPI();
-    console.log("i PARAMS: ", req.params);
-    const { id } = req.params;
+    const { id } = request.params;
     try {
         const apiRes = await getNoteById(id);
-        res.status(200).json(apiRes);
+        response.status(200).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 })
 
-router.post("/", async (req, res) => {
+router.post("/", async (request, response) => {
     const { createNote } = mongoAPI();
-    const dataObj = req.body;
+    const dataObj = request.body;
     try {
         const apiRes = await createNote(dataObj);
-        res.status(201).json(apiRes);
+        response.status(201).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 })
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", async (request, response) => {
     const { updateNoteById } = mongoAPI();
-    const { id } = req.params;
-    const dataObj = req.body;
+    const { id } = request.params;
+    const dataObj = request.body;
     try {
         const apiRes = await updateNoteById(id, dataObj);
-        res.status(204).json(apiRes);
+        response.status(204).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (request, response) => {
     const { deleteNoteById } = mongoAPI();
-    const { id } = req.params;
+    const { id } = request.params;
     try {
         const apiRes = await deleteNoteById(id);
-        res.status(204).json(apiRes);
+        response.status(204).json(apiRes);
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        response.status(500).send(error);
     }
 })
 
