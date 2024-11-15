@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const mongoose = require("mongoose");
 const User = require("../models/user.model")
+const { formatTime } = require("../middleware/HelperFunctions");
 const tokenSecret = process.env.TOKEN_SECRET;
 const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
@@ -117,13 +118,6 @@ function logTokenPayload(payload) {
     const currentTime = Math.floor(Date.now() / 1000);
     const remainingLifetime = payload.exp - currentTime;
     console.log("TOKEN", "remaining lifetime:", formatTime(remainingLifetime), "created:", issuedAt, "expires:", expiresAt);
-}
-
-function formatTime(seconds) {
-    const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
-    const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${hrs}:${mins}:${secs}`;
 }
 
 module.exports = router;

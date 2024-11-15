@@ -32,7 +32,7 @@ async function getByQueries(queries) {
 
     let result = dataArr;
     for (let i = 0; i < queryKeys.length; i++) {
-        console.log("QUERY(" + i + ")=", queryKeys[i] + ":", queryValues[i]);
+        console.log(`QUERY(${i})=`, queryKeys[i] + ":", queryValues[i]);
         result = result.filter((entry) => entry[queryKeys[i]] == queryValues[i]);
     }
 
