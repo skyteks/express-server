@@ -48,8 +48,7 @@ router.post("/register", (request, response) => {
             response.status(500).json({ message: "Internal Server Error" })
         })
         .then((createdUser) => {
-            if (!createdUser) 
-            {
+            if (!createdUser) {
                 return;
             }
             const { username, email, _id } = createdUser;
@@ -64,18 +63,20 @@ router.post("/register", (request, response) => {
 });
 
 router.post("/login", (request, response) => {
-    console.log("LOGIN: ", request.body);
-    const { username, password } = request.body;
+    console.log("LOGIN", request.body);
+    const { email, password } = request.body;
 
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
         response.status(400).json({ message: "Provide email and password." });
         return;
     }
 
-    User.findOne({ username })
+    User.findOne({ email })
         .then((foundUser) => {
 
             if (!foundUser) {
+                console.log("LOGIN", "User not found.");
+
                 response.status(401).json({ message: "User not found." })
                 return;
             }
@@ -83,39 +84,40 @@ router.post("/login", (request, response) => {
             const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
             if (!passwordCorrect) {
-                response.status(401).json({ message: "Unable to authenticate the user" });
+                console.log("LOGIN", "Wrong username or password.");
+
+                response.status(401).json({ message: "Wrong username or password." });
                 return;
             }
 
             const { _id, username } = foundUser;
 
-            const payload = { _id, username };
+            const payload = { username };
 
-            const authToken = jwt.sign(
-                payload,
-                tokenSecret,
-                { algorithm: "HS256", expiresIn: "6h" }
-            );
+            const authToken = jwt.sign(payload, tokenSecret, { algorithm: "HS256", expiresIn: "6h" });
 
             response.status(200).json({ authToken: authToken });
 
         })
-        .catch(err => response.status(500).json({ message: "Internal Server Error" }));
+        .catch((error) => {
+            console.error("LOGIN", error);
+
+            response.status(500).json({ message: "Internal Server Error" });
+        });
 });
 
 router.get("/verify", isAuthenticated, (request, response) => {
-    const issuedAt = new Date(request.payload.iat * 1000);
-    const expiresAt = new Date(request.payload.exp * 1000);
-    console.log("TOKEN created: ", issuedAt);
-    console.log("TOKEN expires: ", expiresAt);
-    
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    const remainingLifetime = request.payload.exp - currentTime;
-    console.log("TOKEN remaining lifetime: ", formatTime(remainingLifetime));
-    
+    logTokenPayload(request.payload)
     response.status(200).json(request.payload);
 });
+
+function logTokenPayload(payload) {
+    const issuedAt = new Date(payload.iat * 1000);
+    const expiresAt = new Date(payload.exp * 1000);
+    const currentTime = Math.floor(Date.now() / 1000);
+    const remainingLifetime = payload.exp - currentTime;
+    console.log("TOKEN", "remaining lifetime:", formatTime(remainingLifetime), "created:", issuedAt, "expires:", expiresAt);
+}
 
 function formatTime(seconds) {
     const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
