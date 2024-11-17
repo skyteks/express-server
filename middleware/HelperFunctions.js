@@ -34,7 +34,7 @@ function formatTime(seconds) {
     return `${hrs}:${mins}:${secs}`;
 }
 
-export {
-    //getStatusMeaning,
+module.exports = {
+    getStatusMeaning,
     formatTime,
 };

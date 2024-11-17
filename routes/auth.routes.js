@@ -65,14 +65,14 @@ router.post("/register", (request, response) => {
 
 router.post("/login", (request, response) => {
     console.log("LOGIN", request.body);
-    const { email, password } = request.body;
+    const { username, password } = request.body;
 
-    if (email === "" || password === "") {
-        response.status(400).json({ message: "Provide email and password." });
+    if (username === "" || password === "") {
+        response.status(400).json({ message: "Provide username and password." });
         return;
     }
 
-    User.findOne({ email })
+    User.findOne({ username })
         .then((foundUser) => {
 
             if (!foundUser) {
@@ -91,9 +91,9 @@ router.post("/login", (request, response) => {
                 return;
             }
 
-            const { _id, username } = foundUser;
+            const { _id, email } = foundUser;
 
-            const payload = { username };
+            const payload = { _id, username, email };
 
             const authToken = jwt.sign(payload, tokenSecret, { algorithm: "HS256", expiresIn: "6h" });
 
