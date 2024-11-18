@@ -6,13 +6,15 @@ const isAuthenticated = (request, response, next) => {
 
         const payload = jwt.verify(token, process.env.TOKEN_SECRET);
         console.log("TOKEN authentication successful");
-        
+
         request.payload = payload;
 
         next();
     } catch (error) {
+        console.log("TOKEN authentication failed!");
+
         response.status(401).json("token not provided or not valid");
     }
 }
 
-module.exports = { isAuthenticated }
+module.exports = isAuthenticated;

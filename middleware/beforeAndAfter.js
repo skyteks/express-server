@@ -9,7 +9,8 @@ function handleBefore(request, response, next) {
     console.log("Params: ", request.params);
     console.log("Query: ", request.query);
     */
-    
+    console.log(request.method.toUpperCase(), request.originalUrl, request.body);
+
     next();
 }
 
