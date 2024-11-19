@@ -74,7 +74,7 @@ async function updateNoteById(id, dataObj) {
     const objId = mongoose.Types.ObjectId.createFromHexString(id)
     return Note.findByIdAndUpdate(objId, dataObj)
         .then((note) => {
-            console.log("Updated note ->", note);
+            console.log("Updated note's entries->", Object.keys(dataObj).length - 1);
             return note;
         })
         .catch((error) => {
@@ -100,7 +100,6 @@ async function getAllUsernames() {
     return User.find({}).select({"username": 1})
         .then((users) => {
             console.log("Retrieved users names ->", users.length);
-            console.log(users);
             
             return users;
         })
