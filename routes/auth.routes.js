@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middleware/jwt.middleware");
 const mongoose = require("mongoose");
 const User = require("../models/user.model")
-const { formatTime } = require("../middleware/HelperFunctions");
+const { formatTime, capitalize } = require("../middleware/HelperFunctions");
 const tokenSecret = process.env.TOKEN_SECRET;
 const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
@@ -29,21 +29,20 @@ router.post("/register", (request, response) => {
         return;
     }
 
-    User.findOne({ email })
-        .then((foundUser) => {
-            if (foundUser) {
-                console.log("REGISTER", "User already exists.");
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashedPassword = bcrypt.hashSync(password, salt);
 
-                response.status(400).json({ message: "User already exists." });
+    return User.create({ username, email, password: hashedPassword })
+        .catch((error) => {
+            if (error.code == 11000) {
+                const keyName = capitalize(Object.keys(error.keyValue)[0].toString());
+                const message = `User with this ${keyName} already exists.`;
+                console.log("REGISTER", message);
+
+                response.status(409).json({ message: message });
                 return;
             }
 
-            const salt = bcrypt.genSaltSync(saltRounds);
-            const hashedPassword = bcrypt.hashSync(password, salt);
-
-            return User.create({ username, email, password: hashedPassword });
-        })
-        .catch((error) => {
             console.error("REGISTER", error);
 
             response.status(500).json({ message: "Internal Server Error" })

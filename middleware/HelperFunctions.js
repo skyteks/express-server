@@ -34,7 +34,13 @@ function formatTime(seconds) {
     return `${hrs}:${mins}:${secs}`;
 }
 
+function capitalize(string)
+{
+    return string && String(string[0]).toUpperCase() + String(string).slice(1);
+}
+
 module.exports = {
     getStatusMeaning,
     formatTime,
+    capitalize,
 };
