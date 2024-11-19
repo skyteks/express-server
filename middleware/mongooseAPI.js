@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const Note = require("../models/note.model")
+const Note = require("../models/note.model");
+const User = require("../models/user.model");
 
 const uri = process.env.MONGODB_URI;
 
@@ -95,6 +96,20 @@ async function deleteNoteById(id) {
         });
 }
 
+async function getAllUsernames() {
+    return User.find({}).select({"username": 1})
+        .then((users) => {
+            console.log("Retrieved users names ->", users.length);
+            console.log(users);
+            
+            return users;
+        })
+        .catch((error) => {
+            console.error("Error while retrieving users names ->", error);
+            throw new Error("Failed to retrieve users names");
+        });
+}
+
 function mongooseAPI() {
     return {
         getAllNotes,
@@ -103,6 +118,7 @@ function mongooseAPI() {
         createNote,
         updateNoteById,
         deleteNoteById,
+        getAllUsernames,
     };
 }
 

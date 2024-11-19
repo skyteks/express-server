@@ -3,7 +3,7 @@ const { log } = require("console");
 const path = require("path");
 const mongooseAPI = require(path.resolve("./middleware/mongooseAPI"));
 
-router.get("/", async (request, response) => {
+router.get("/notes", async (request, response) => {
     const { getAllNotes } = mongooseAPI();
     try {
         const apiRes = await getAllNotes();
@@ -14,7 +14,7 @@ router.get("/", async (request, response) => {
     }
 });
 
-router.get("/search", async (request, response) => {
+router.get("/notes/search", async (request, response) => {
     const { findNotesByQuery1 } = mongooseAPI();
     try {
         const apiRes = await findNotesByQuery1(request.query);
@@ -25,7 +25,7 @@ router.get("/search", async (request, response) => {
     }
 });
 
-router.get("/:id", async (request, response) => {
+router.get("/notes/:id", async (request, response) => {
     const { getNoteById } = mongooseAPI();
     const { id } = request.params;
     try {
@@ -37,7 +37,7 @@ router.get("/:id", async (request, response) => {
     }
 })
 
-router.post("/", async (request, response) => {
+router.post("/notes", async (request, response) => {
     const { createNote } = mongooseAPI();
     const dataObj = request.body.data;
     try {
@@ -49,7 +49,7 @@ router.post("/", async (request, response) => {
     }
 })
 
-router.patch("/:id", async (request, response) => {
+router.patch("/notes/:id", async (request, response) => {
     const { updateNoteById } = mongooseAPI();
     const { id } = request.params;
     const dataObj = request.body.data;
@@ -62,7 +62,7 @@ router.patch("/:id", async (request, response) => {
     }
 })
 
-router.delete("/:id", async (request, response) => {
+router.delete("/notes/:id", async (request, response) => {
     const { deleteNoteById } = mongooseAPI();
     const { id } = request.params;
     try {
@@ -73,5 +73,16 @@ router.delete("/:id", async (request, response) => {
         response.status(500).send(error);
     }
 })
+
+router.get("/users", async (request, response) => {
+    const { getAllUsernames } = mongooseAPI();
+    try {
+        const apiRes = await getAllUsernames();
+        response.status(200).json(apiRes);
+    } catch (error) {
+        console.error(error);
+        response.status(500).send(error);
+    }
+});
 
 module.exports = router;
