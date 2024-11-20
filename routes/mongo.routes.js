@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { log } = require("console");
 const path = require("path");
 const mongooseAPI = require(path.resolve("./middleware/mongooseAPI"));
 

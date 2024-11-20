@@ -2,7 +2,6 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middleware/jwt.middleware");
-const mongoose = require("mongoose");
 const User = require("../models/user.model")
 const { formatTime, capitalize } = require("../middleware/HelperFunctions");
 const tokenSecret = process.env.TOKEN_SECRET;
@@ -39,7 +38,7 @@ router.post("/register", (request, response) => {
                 const message = `User with this ${keyName} already exists.`;
                 console.log("REGISTER", message);
 
-                response.status(409).json({ message: message });
+                response.status(409).json({ message });
                 return;
             }
 
@@ -96,7 +95,7 @@ router.post("/login", (request, response) => {
 
             const authToken = jwt.sign(payload, tokenSecret, { algorithm: "HS256", expiresIn: "6h" });
 
-            response.status(200).json({ authToken: authToken });
+            response.status(200).json({ authToken });
 
         })
         .catch((error) => {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const isAuthenticated = (request, response, next) => {
+function isAuthenticated(request, response, next) {
     try {
         const token = request.headers.authorization.split(" ")[1];
 
@@ -13,7 +13,7 @@ const isAuthenticated = (request, response, next) => {
     } catch (error) {
         console.log("TOKEN authentication failed!");
 
-        response.status(401).json("token not provided or not valid");
+        response.status(401).json({ message: "Token not provided or not valid."});
     }
 }
 
