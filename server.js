@@ -9,7 +9,7 @@ const isAuthenticated = require("./middleware/jwt.middleware");
 const authRoutes = require("./routes/auth.routes");
 const cors = require("cors");
 const app = express();
-const port = process.env.PORT || 5005;
+const port = process.env.PORT;
 
 app.use(cors({ credentials: true }))
 app.use(logger("dev"));
