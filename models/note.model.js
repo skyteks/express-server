@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
-const { colors } = require("../data/colors.json");
+const { colors, statusTypes } = require("../data/data.json");
 
 const noteSchema = new Schema({
     title: { type: String, required: true, unique: true },
-    status: { type: String, enum: ["backlog", "todo", "doing", "test", "done"], required: true },
+    status: { type: String, enum: statusTypes, required: true },
     color: { type: String, enum: colors, required: true },
     author: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     text1: { type: String, required: true },

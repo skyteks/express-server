@@ -4,5 +4,12 @@
         "rgb(204, 251, 135)",
         "rgb(168, 233, 251)",
         "rgb(255, 191, 252)"
+    ],
+    "statusTypes": [
+        "backlog",
+        "todo",
+        "doing",
+        "test",
+        "done"
     ]
 }

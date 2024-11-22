@@ -8,7 +8,7 @@ const axiosRoutes = require("./routes/axios.routes");
 const mongoRoutes = require("./routes/mongo.routes");
 const isAuthenticated = require("./middleware/jwt.middleware");
 const authRoutes = require("./routes/auth.routes");
-const cors = require("cors")
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5005;
 
@@ -25,16 +25,12 @@ app.use("/axios", axiosRoutes);
 
 app.use("/mongo", isAuthenticated, mongoRoutes);
 
-app.get("/", (request, response) => {
-    response.sendFile("./view/index.html");
-});
-
 app.get("/hello", (request, response) => {
     response.send("<h1>Hello World</h1>");
 });
 
 app.get("*", (request, response) => {
-    response.status(404).send("<h1>404 Not Found</h1>");
+    response.status(404).json({message: "This route does not exist."});
 });
 
 app.listen(port, () => console.log("Express Server running on: http://localhost:" + port));
