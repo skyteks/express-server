@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const path = require("path");
 const mongooseAPI = require(path.resolve("./middleware/mongooseAPI"));
-const isAuthenticated = require("./middleware/jwt.middleware");
+const isAuthenticated = require("../middleware/jwt.middleware");
 
 router.get("/notes", async (_request, response) => {
     const { getAllNotes } = mongooseAPI();
