@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const path = require("path");
 const mongooseAPI = require(path.resolve("./middleware/mongooseAPI"));
+const isAuthenticated = require("./middleware/jwt.middleware");
 
-router.get("/notes", async (request, response) => {
+router.get("/notes", async (_request, response) => {
     const { getAllNotes } = mongooseAPI();
     try {
         const apiRes = await getAllNotes();
@@ -34,9 +35,9 @@ router.get("/notes/:id", async (request, response) => {
         console.error(error);
         response.status(500).send(error);
     }
-})
+});
 
-router.post("/notes", async (request, response) => {
+router.post("/notes", isAuthenticated, async (request, response) => {
     const { createNote } = mongooseAPI();
     const dataObj = request.body.data;
     try {
@@ -46,9 +47,9 @@ router.post("/notes", async (request, response) => {
         console.error(error);
         response.status(500).send(error);
     }
-})
+});
 
-router.patch("/notes/:id", async (request, response) => {
+router.patch("/notes/:id", isAuthenticated, async (request, response) => {
     const { updateNoteById } = mongooseAPI();
     const { id } = request.params;
     const dataObj = request.body.data;
@@ -59,9 +60,9 @@ router.patch("/notes/:id", async (request, response) => {
         console.error(error);
         response.status(500).send(error);
     }
-})
+});
 
-router.delete("/notes/:id", async (request, response) => {
+router.delete("/notes/:id", isAuthenticated, async (request, response) => {
     const { deleteNoteById } = mongooseAPI();
     const { id } = request.params;
     try {
@@ -71,9 +72,9 @@ router.delete("/notes/:id", async (request, response) => {
         console.error(error);
         response.status(500).send(error);
     }
-})
+});
 
-router.get("/users", async (request, response) => {
+router.get("/users", async (_request, response) => {
     const { getAllUsernames } = mongooseAPI();
     try {
         const apiRes = await getAllUsernames();

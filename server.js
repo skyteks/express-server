@@ -5,7 +5,6 @@ const favicon = require("serve-favicon");
 const handleBefore = require("./middleware/beforeAndAfter");
 require("dotenv").config();
 const mongoRoutes = require("./routes/mongo.routes");
-const isAuthenticated = require("./middleware/jwt.middleware");
 const authRoutes = require("./routes/auth.routes");
 const cors = require("cors");
 const app = express();
@@ -20,13 +19,13 @@ app.use(handleBefore);
 
 app.use("/", authRoutes);
 
-app.use("/mongo", isAuthenticated, mongoRoutes);
+app.use("/mongo", mongoRoutes);
 
-app.get("/hello", (request, response) => {
+app.get("/hello", (_request, response) => {
     response.send("<h1>Hello World</h1>");
 });
 
-app.get("*", (request, response) => {
+app.get("*", (_request, response) => {
     response.status(404).json({message: "This route does not exist."});
 });
 
