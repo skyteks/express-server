@@ -10,7 +10,7 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: "https://react-kanban-board-main.netlify.app" }))
 app.use(logger("dev"));
 app.use(express.static("public"));
 app.use(express.json());
