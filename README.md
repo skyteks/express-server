@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8bb2a5cf-a178-4d27-a24a-e6ff81df2b0c/deploy-status)](https://app.netlify.com/sites/react-kanban-board-main/deploys)
 
 ## Introduction
 
