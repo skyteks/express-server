@@ -1,6 +1,5 @@
 const express = require("express");
 const logger = require("morgan");
-const path = require("path");
 const favicon = require("serve-favicon");
 const handleBefore = require("./middleware/beforeAndAfter");
 require("dotenv").config();
