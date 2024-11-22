@@ -4,7 +4,6 @@ const path = require("path");
 const favicon = require("serve-favicon");
 const handleBefore = require("./middleware/beforeAndAfter");
 require("dotenv").config();
-const axiosRoutes = require("./routes/axios.routes");
 const mongoRoutes = require("./routes/mongo.routes");
 const isAuthenticated = require("./middleware/jwt.middleware");
 const authRoutes = require("./routes/auth.routes");
@@ -20,8 +19,6 @@ app.use(favicon("./public/favicon.ico"));
 app.use(handleBefore);
 
 app.use("/", authRoutes);
-
-app.use("/axios", axiosRoutes);
 
 app.use("/mongo", isAuthenticated, mongoRoutes);
 
