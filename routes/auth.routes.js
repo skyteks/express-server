@@ -8,7 +8,6 @@ const tokenSecret = process.env.TOKEN_SECRET;
 const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
 router.post("/register", (request, response) => {
-    console.log("REGISTER", request.body);
     const { username, password, email } = request.body;
 
     if (username === "" || password === "" || email === "") {
@@ -36,13 +35,13 @@ router.post("/register", (request, response) => {
             if (error.code == 11000) {
                 const keyName = capitalize(Object.keys(error.keyValue)[0].toString());
                 const message = `User with this ${keyName} already exists.`;
-                console.log("REGISTER", message);
+                console.log(">REGISTER", message);
 
                 response.status(409).json({ message });
                 return;
             }
 
-            console.error("REGISTER", error);
+            console.error(">REGISTER", error);
 
             response.status(500).json({ message: "Internal Server Error" })
         })
@@ -52,17 +51,17 @@ router.post("/register", (request, response) => {
             }
             const { username, email, _id } = createdUser;
             const user = { username, email, _id };
+            console.log(">REGISTER successfull -", username);
             response.status(201).json({ user: user });
         })
         .catch((error) => {
-            console.error("REGISTER", error);
+            console.error(">REGISTER", error);
 
             response.status(500).json({ message: "Internal Server Error" })
         });
 });
 
 router.post("/login", (request, response) => {
-    console.log("LOGIN", request.body);
     const { username, password } = request.body;
 
     if (username === "" || password === "") {
@@ -74,7 +73,7 @@ router.post("/login", (request, response) => {
         .then((foundUser) => {
 
             if (!foundUser) {
-                console.log("LOGIN", "User not found.");
+                console.log(">LOGIN", "User not found.");
 
                 response.status(401).json({ message: "User not found." })
                 return;
@@ -83,23 +82,22 @@ router.post("/login", (request, response) => {
             const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
             if (!passwordCorrect) {
-                console.log("LOGIN", "Wrong username or password.");
+                console.log(">LOGIN", "Wrong username or password.");
 
                 response.status(401).json({ message: "Wrong username or password." });
                 return;
             }
 
             const { _id, email } = foundUser;
-
             const payload = { _id, username, email };
-
             const authToken = jwt.sign(payload, tokenSecret, { algorithm: "HS256", expiresIn: "6h" });
 
+            console.log(">LOGIN successful - ", username);
             response.status(200).json({ authToken });
 
         })
         .catch((error) => {
-            console.error("LOGIN", error);
+            console.error(">LOGIN", error);
 
             response.status(500).json({ message: "Internal Server Error" });
         });

@@ -8,9 +8,14 @@ const mongoRoutes = require("./routes/mongo.routes");
 const authRoutes = require("./routes/auth.routes");
 const cors = require("cors");
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
+const corsOptions = {
+    credentials: true,
+    origin: ["https://react-kanban-board-main.netlify.app", "http://localhost", `http://localhost:${port}`],
+    exposedHeaders: ["Authorization", "username"],
+};
 
-app.use(cors({ credentials: true, origin: "https://react-kanban-board-main.netlify.app" }))
+app.use(cors(corsOptions))
 app.use(logger("dev"));
 app.use(express.static("public"));
 app.use(express.json());
@@ -26,7 +31,7 @@ app.get("/hello", (_request, response) => {
 });
 
 app.get("*", (_request, response) => {
-    response.status(404).json({message: "This route does not exist."});
+    response.status(404).json({ message: "This route does not exist." });
 });
 
 app.listen(port, () => console.log("Express Server running on: http://localhost:" + port));
