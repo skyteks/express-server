@@ -10,8 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const corsOptions = {
     credentials: true,
-    origin: ["https://react-kanban-board-main.netlify.app", "http://localhost", `http://localhost:${port}`],
-    exposedHeaders: ["Authorization", "username"],
+    origin: ["https://react-kanban-board-main.netlify.app", "http://localhost:5173"],
 };
 
 app.use(cors(corsOptions))
